@@ -1,23 +1,53 @@
 #!/bin/bash
 # Rick Astley in your Terminal. Prefers 256-color.
 # Execution must occur from same directory
-# 2013.03.04 03:24:35
+# 2013.03.04 
 # ~ keroserene <3
+version='1.0'
 
-NEVER="cp -f -v"
-GONNA_GIVE="astley80.lulz"
-YOU_UP="$HOME/.never_gonna_let_you_down"
-GONNA_TURN_AROUND="astley.sh"
-AND_DESERT_YOU="$HOME/.never_gonna_make_you_cry"
-NEVER_GONNA_SAY_GOODBYE='http://dl.dropbox.com/u/29033049/lol/astley80.lulz'
-NEVER_GONNA_TELL_A_LIE="INT TERM EXIT STOP SUSPEND"
-I_JUST_WANNA_TELL_YOU_HOW_IM_FEELING="$HOME/.bashrc"
+my_head=${BASH_SOURCE[0]}
+base_dir=$(dirname $my_head)
+render='astley80.lulz'
+script='astley.sh'
+
+NEVER="cp -f"
+GONNA_GIVE="${base_dir}/${render}"
+YOU_UP="$HOME/.${render}"  # Rendering destination.
+GONNA_TURN_AROUND="${base_dir}/${script}"
+AND_DESERT_YOU="$HOME/.${script}"  # Script destination.
+NEVER_GONNA_SAY_GOODBYE="http://dl.dropbox.com/u/29033049/lol/${render}"
+NEVER_GONNA_TELL_A_LIE="INT TERM EXIT STOP SUSPEND"  # For evil mode.
+AND_HURT_YOU="$HOME/.bashrc"
+
+# Terminal helpers (Assumes 256 colors).
 red='\e[38;5;9m'
 purp='\e[38;5;171m'
 yell='\e[38;5;216m'
 green='\e[38;5;10m'
 gr=$(which grep)
-NEVER_GONNA_GIVE="cat"
+NEVER_GONNA_GIVE="cat"  # Mreow!
+usage () {
+  echo "Rick Astley performs Never Gonna Give You Up on STDOUT."
+  echo -e "${yell}Usage: ./astley.sh [OPTIONS...]"
+  echo
+  echo -e "${purp}Options:${yell}"
+  echo -e "  inject - Append to ${purp}${USER}${yell}'s bashrc. (Recommended)"
+  echo "  evil   - No prompts. Replaces shell signals with Rick Roll lyrics."
+  echo "  stop   - Actually Gonna Give You Up. No more Rick Roll. :("
+  echo
+}
+interactive() {
+  echo -e "${green}rickrollrc - v$version"
+  usage
+  prompt "May I tell you how I'm feeling?"
+  if [[ $? -gt 0 ]]; then
+    prompt "Inject into bashrc?"
+    [[ $? -gt 0 ]] && echo " Abort. " && exit 0
+    inject=true
+    save_term=true
+    echo
+  fi
+}
 prompt() {
   echo -ne "$yell > $1 $purp[y/n] $red"
   read input
@@ -25,59 +55,61 @@ prompt() {
   return 1
 }
 clean() {
+  unset astleys
+  astleys=$(ps ax | $gr "${script} \| *${render}" | $gr -v "grep \| vim" | $gr -v $$ | awk '{print $1}')
+  echo -en "${purp}Pending rick roll pids: ${yell}"
+  echo -n $astleys
+  echo -n " ... "
   kill -9 $astleys &> /dev/null
-  exit 0
+  echo -e "${red}Stopped."
+  [[ -f "$YOU_UP.dl" ]] && rm "$YOU_UP.dl"
+  echo -e "${green} Goodbye. (I said it!)"
+  quit
 }
-unset astleys
-astleys=$(ps ax | $gr './astley.sh' | $gr '/bin/' | $gr -v "$$" | awk '{print $1}')
-
-# Safety first m'dears
-if [[ "$1" = "stop"* ]]; then
-  echo -e "${red}Never gonna say goodbye. |c|=${#astleys[@]}"
-  echo -e "${purp}Roll'n PIDs:${yell}"
-  echo $astleys
-  echo -e "${green} ... goodbye <3"
-  clean
-fi 
-
-#
-if [[ "$1" == "inject" ]]; then
-  inject=true
-  echo -e "${green}Injection Mode (bashrc)"
-  echo -e "${red}Inside, we both know what's been going on.${purp}"
-
-elif [[ "$1" != "lulz"* ]]; then
-  echo -e " ${green} Options:${purp}"
-  echo  "    lulz : Skip prompts, 'handle' sigs."
-  echo  "    inject : Bring a guest to your bashrc."
-  echo  "    stop : Done roll'n with astley."
-  echo -e " ${green} Astley PIDs:" $astleys
-  prompt "May I tell you how I'm feeling?"
-  if [[ $? -gt 0 ]]; then
-    prompt "Inject into bashrc?"
-    [[ $? -gt 0 ]] && echo " Abort. " && clean
+quit() {
+  echo -en "\e[?25h \e[0m"   # Reset cursor
+  [[ $save_term ]] || echo -e "\e[2J \e[H <3"
+  [[ -z ${BASH_SOURCE[1]} ]] && return 0 || exit 0 
+}
+for arg in "$@"; do
+  if [[ "$arg" == "inject"* ]]; then
+    argged=true
     inject=true
-  fi
-fi
+    save_term=true
+  elif [[ "$arg" == "evil"* ]]; then
+    argged=true
+    evil=true
+  elif [[ "$1" = "stop"* ]]; then
+    argged=true
+    save_term=true
+    clean
+  fi 
+done
+[[ -z $argged ]] && interactive
 
-# Append .bashrc for additional lulz
-if [[ $inject ]]; then
-  echo -en "${yell}cp: "
-  $NEVER $GONNA_TURN_AROUND $AND_DESERT_YOU
-  echo "$AND_DESERT_YOU lulz" >> $I_JUST_WANNA_TELL_YOU_HOW_IM_FEELING
-  echo -e "${purp}...appended to $I_JUST_WANNA_TELL_YOU_HOW_IM_FEELING"
-  echo -e "${green}Your astley injections has come to fruition. <3"
-  exit 0
-fi
+[[ $evil ]] && echo -en "${red}[Evil] "
+[[ $inject ]] && echo -en "${yell}[Injection]"
+echo
 
-# Ensure ready to roll, either via local or wget
+# Install local astley render if available.
 if [[ -f $GONNA_GIVE ]]; then
   $NEVER $GONNA_GIVE $YOU_UP
+
 elif [[ ! -f $YOU_UP ]]; then
-  echo -e "${red}We're no strangers to love${purp}"
   wget $NEVER_GONNA_SAY_GOODBYE -O "$YOU_UP.dl"
   mv "$YOU_UP.dl" $YOU_UP
 fi
+
+if [[ $inject ]]; then
+  # Just inject, no rendering fun this time. Do preserve the evil flag, though.
+  [[ $evil ]] && earg="evil"
+  echo "$AND_DESERT_YOU $earg" >> $AND_HURT_YOU
+  echo -e "${green}Rick Rolls appended to $AND_HURT_YOU. <3"
+  quit
+fi
+
+bgmode=''
+[[ $evil ]] && bgmode='&'
 
 never_gonna=(
 "We're no strangers to love"
@@ -115,22 +147,25 @@ oooh() {
   (( give++ ))
   kill -CONT $GOTTA_MAKE_YOU_UNDERSTAND
 }
-# ... you know the rules, and so do I
-trap - $NEVER_GONNA_TELL_A_LIE
-trap "oooh" 1
-trap "oooh" 2
-trap "oooh" 15
-trap "oooh" 17
-trap "oooh" 19
-trap "oooh" 20
-trap "oooh" 24
+if [[ $evil ]]; then
+  # ... you know the rules, and so do I
+  trap - $NEVER_GONNA_TELL_A_LIE
+  trap "oooh" 1 2 9 15 17 19 20 23 24
+fi
+trap "clean" EXIT
 # we know the game and we're gonna play it!
 echo -e "\e[2J"
-$NEVER_GONNA_GIVE $YOU_UP &
-GOTTA_MAKE_YOU_UNDERSTAND=$!
+
+if [[ $evil ]]; then
+  $NEVER_GONNA_GIVE $YOU_UP & 
+  GOTTA_MAKE_YOU_UNDERSTAND=$!
+else
+  $NEVER_GONNA_GIVE $YOU_UP
+fi
+
 while [[ 1 ]]; do
   echo -en ''
 done
-trap $NEVER_GONNA_TELL_A_LIE
+[[ $evil ]] && trap $NEVER_GONNA_TELL_A_LIE 
 
 echo -e '\e[u'

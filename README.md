@@ -1,20 +1,51 @@
-rickrollrc
-==========
+# rickrollrc - Rick Roll from the terminal.
 
-For the classic experience:
+These scripts Rick Roll your terminal, with the option to enable
+indefinite "Never Gonna Give You Up" encores for those who seek
+vigorous, 80s musicvideo appreciation sessions.
 
-./astley.sh
+![Rick Roll in xterms]()
 
-For enhanced *lulz*, such as injecting Astleys into someone's bashrc:
+## How to Roll
 
-./astley.sh inject
-  
-If you have become excessively terrified:
+To get started, just do:
 
-./astley.sh stop
+    wget https://raw.github.com/keroserene/rickrollrc/master/lulz
+    ./lulz
 
------
+## Details & Dependencies
 
-Enjoy, and feel free to fork, rice-out, pull-request and whatnot.
+For most effective Roll'n, use a 256-color terminal.
+(After all, Rick Rolling is a colorful hobby.)
 
-Kudos to @jart for hiptext shenanigans.
+For the basic interactive experience:
+
+    ./astley.sh
+
+For the enhanced-lulz experience (Which is handy because it injects rickrollrc 
+into bashrc):
+
+    ./lulz
+ 
+During the performance, if you'd like to intercept rude interruptions such as SIGINT,
+SIGTERM, etc. and replace them with lyrics, do the following:
+
+    ./astley.sh evil
+
+
+Finally, to go for the gold:
+
+    ./astley.sh inject evil
+
+This is what ./lulz automatically does + and more. :)
+
+## Misc.
+
+If you've astley-overdosed, run:
+
+    ./astley.sh stop
+
+
+Enjoy! Feel free to fork, rice-out, pull-request, etc.
+
+Kudos to @jart for lovely hiptext shenanigans ;)
