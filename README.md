@@ -1,51 +1,53 @@
-# rickrollrc - Rick Roll from the terminal.
+# rickrollrc
 
-These scripts Rick Roll your terminal, with the option to enable
-indefinite "Never Gonna Give You Up" encores for those who seek
-vigorous, 80s musicvideo appreciation sessions.
+Bash script which Rick Rolls your terminal, with the option to enable
+indefinite encores for those who desire intense 80's music video
+appreciation sessions.
 
 ![Rick Roll in xterms]()
 
 ## How to Roll
 
-To get started, just do:
+To start rick rollin' immediately:
 
-    wget https://raw.github.com/keroserene/rickrollrc/master/lulz
-    ./lulz
+    curl https://raw.github.com/keroserene/rickrollrc/master/astley.sh | bash
 
-## Details & Dependencies
 
-For most effective Roll'n, use a 256-color terminal.
-(After all, Rick Rolling is a colorful hobby.)
+## Deets
 
-For the basic interactive experience:
+For most effectiveness, make sure you're on a 256-color terminal.
+(After all, this is a colorful hobby.)
+For the basic experience:
 
     ./astley.sh
 
-For the enhanced-lulz experience (Which is handy because it injects rickrollrc 
-into bashrc):
-
-    ./lulz
- 
-During the performance, if you'd like to intercept rude interruptions such as SIGINT,
-SIGTERM, etc. and replace them with lyrics, do the following:
+During Rick's performance, if you wish to prevent rude interruptions and 
+signals from things like Ctrl-C, etc. (and replace them with lyrics).
 
     ./astley.sh evil
 
+If you *really* will Never Give You Up, 
+then you should append to $USER's bashrc. (highly recommended)
 
-Finally, to go for the gold:
+    ./astley.sh inject
+
+To go for the gold:
 
     ./astley.sh inject evil
 
-This is what ./lulz automatically does + and more. :)
+Finally, to spread the love,
+chmod 777 on lulz and display prominently in $HOME.
+
+    ./lulz
+
+Which does *everything*. :)
 
 ## Misc.
 
-If you've astley-overdosed, run:
+If you've astley-overdosed:
 
     ./astley.sh stop
 
-
 Enjoy! Feel free to fork, rice-out, pull-request, etc.
 
-Kudos to @jart for lovely hiptext shenanigans ;)
+Kudos to @jart for our lovely hiptext shenanigans ;)

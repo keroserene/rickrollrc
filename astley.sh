@@ -1,10 +1,8 @@
 #!/bin/bash
 # Rick Astley in your Terminal. Prefers 256-color.
-# Execution must occur from same directory
 # 2013.03.04 
 # ~ keroserene <3
 version='1.0'
-
 my_head=${BASH_SOURCE[0]}
 base_dir=$(dirname $my_head)
 render='astley80.lulz'
@@ -27,26 +25,15 @@ green='\e[38;5;10m'
 gr=$(which grep)
 NEVER_GONNA_GIVE="cat"  # Mreow!
 usage () {
-  echo "Rick Astley performs Never Gonna Give You Up on STDOUT."
+  echo -e "${green}Rick Astley performs ♪ Never Gonna Give You Up ♪ on STDOUT."
   echo -e "${yell}Usage: ./astley.sh [OPTIONS...]"
   echo
   echo -e "${purp}Options:${yell}"
-  echo -e "  inject - Append to ${purp}${USER}${yell}'s bashrc. (Recommended)"
+  echo -e "  help   - Show this message."
+  echo -e "  inject - Append to ${purp}${USER}${yell}'s bashrc. (Recommended :D)"
   echo "  evil   - No prompts. Replaces shell signals with Rick Roll lyrics."
-  echo "  stop   - Actually Gonna Give You Up. No more Rick Roll. :("
+  echo "  stop   - Actually Gonna Give You Up. (Stop all roll'n processes) :("
   echo
-}
-interactive() {
-  echo -e "${green}rickrollrc - v$version"
-  usage
-  prompt "May I tell you how I'm feeling?"
-  if [[ $? -gt 0 ]]; then
-    prompt "Inject into bashrc?"
-    [[ $? -gt 0 ]] && echo " Abort. " && exit 0
-    inject=true
-    save_term=true
-    echo
-  fi
 }
 prompt() {
   echo -ne "$yell > $1 $purp[y/n] $red"
@@ -63,16 +50,21 @@ clean() {
   kill -9 $astleys &> /dev/null
   echo -e "${red}Stopped."
   [[ -f "$YOU_UP.dl" ]] && rm "$YOU_UP.dl"
-  echo -e "${green} Goodbye. (I said it!)"
+  echo -e "${green}Goodbye. (I said it!)"
   quit
 }
 quit() {
   echo -en "\e[?25h \e[0m"   # Reset cursor
-  [[ $save_term ]] || echo -e "\e[2J \e[H <3"
-  [[ -z ${BASH_SOURCE[1]} ]] && return 0 || exit 0 
+  [[ -n $save_term ]] || echo -e "\e[2J \e[H <3"
+  [[ -n $return_mode ]] && return 0 || exit 0 
 }
+
+# Begin the things.
 for arg in "$@"; do
-  if [[ "$arg" == "inject"* ]]; then
+  if [[ "$arg" == "help"* || "$arg" == "-h"* ]]; then
+    argged=true
+    usage && exit
+  elif [[ "$arg" == "inject"* ]]; then
     argged=true
     inject=true
     save_term=true
@@ -83,9 +75,14 @@ for arg in "$@"; do
     argged=true
     save_term=true
     clean
+  elif [[ "$arg" == "src"* ]]; then
+    return_mode=true
+  else
+    echo -e "${red}Unrecognized option: $arg"
+    usage && exit
   fi 
 done
-[[ -z $argged ]] && interactive
+# [[ -z $argged ]] && interactive
 
 [[ $evil ]] && echo -en "${red}[Evil] "
 [[ $inject ]] && echo -en "${yell}[Injection]"
@@ -94,7 +91,6 @@ echo
 # Install local astley render if available.
 if [[ -f $GONNA_GIVE ]]; then
   $NEVER $GONNA_GIVE $YOU_UP
-
 elif [[ ! -f $YOU_UP ]]; then
   wget $NEVER_GONNA_SAY_GOODBYE -O "$YOU_UP.dl"
   mv "$YOU_UP.dl" $YOU_UP

@@ -15,8 +15,6 @@ base=$(dirname $my_head)
 localastley="${base}/astley.sh"
 [[ -f $localastley ]] && cp -f $localastley $rickroll || wget $remote -O $rickroll
 
-. $rickroll inject evil
-
-echo "MEOW"
+. $rickroll inject evil src
 # And of course, where would we be without this?
 . $rickroll
