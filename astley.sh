@@ -183,14 +183,15 @@ else
       next_frame=$((interval / ns_per_frame))
       # slightly if it's *too* fast.
       repose=$((interval - ns_per_frame / 1000000000))
-      # echo -e "$frame \t | $next_frame---- $repose"
+      # echo -e "$frame \t | $next_frame \t $repose"
       if ((repose > 0 && repose < ns_per_frame)); then
         sleep $(printf 0.%09d $repose)
       fi
     fi
     # Only print if no frame skips are necessary.
-    [[ $frame -gt $next_frame ]] && echo -e "$p"
+    [[ $frame -lt $next_frame ]] || echo -e "$p"
   done < $GONNA_GIVE
+  quit
 fi
 
 while [[ 1 ]]; do
