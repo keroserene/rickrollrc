@@ -5,7 +5,8 @@
 version='1.0'
 my_head=${BASH_SOURCE[0]}
 base_dir=$(dirname $my_head)
-render='astley80.lulz'
+# render='astley80.lulz'
+render='astley80.full'
 script='astley.sh'
 
 NEVER="cp -f"
@@ -24,6 +25,7 @@ yell='\e[38;5;216m'
 green='\e[38;5;10m'
 gr=$(which grep)
 NEVER_GONNA_GIVE="cat"  # Mreow!
+
 usage () {
   echo -e "${green}Rick Astley performs ♪ Never Gonna Give You Up ♪ on STDOUT."
   echo -e "${yell}Usage: ./astley.sh [OPTIONS...]"
@@ -35,12 +37,14 @@ usage () {
   echo "  stop   - Actually Gonna Give You Up. (Stop all roll'n processes) :("
   echo
 }
+
 prompt() {
   echo -ne "$yell > $1 $purp[y/n] $red"
   read input
   [[ "$input" == "y"* ]] && return 0
   return 1
 }
+
 clean() {
   unset astleys
   astleys=$(ps ax | $gr "${script} \| *${render}" | $gr -v "grep \| vim" | $gr -v $$ | awk '{print $1}')
@@ -57,6 +61,10 @@ quit() {
   echo -en "\e[?25h \e[0m"   # Reset cursor
   [[ -n $save_term ]] || echo -e "\e[2J \e[H <3"
   [[ -n $return_mode ]] && return 0 || exit 0 
+}
+
+nanosec() {
+  date +%s%N
 }
 
 # Begin the things.
@@ -156,7 +164,33 @@ if [[ $evil ]]; then
   $NEVER_GONNA_GIVE $YOU_UP & 
   GOTTA_MAKE_YOU_UNDERSTAND=$!
 else
-  $NEVER_GONNA_GIVE $YOU_UP
+  # $NEVER_GONNA_GIVE $YOU_UP
+  cnt="0"
+  fps=25
+  ns_per_frame=$((1000000000/fps))
+  skip=0
+  begin=$(nanosec)
+  prev=$begin
+  frame=0
+  next_frame=0
+  while read p; do
+    ((cnt++))
+    if [[ $cnt == 32 ]]; then
+      cnt=0; ((frame++))
+      # Calculate skipped frames to attempt constant FPS.
+      now=$(nanosec)
+      interval=$((now - begin))
+      next_frame=$((interval / ns_per_frame))
+      # slightly if it's *too* fast.
+      repose=$((interval - ns_per_frame / 1000000000))
+      # echo -e "$frame \t | $next_frame---- $repose"
+      if ((repose > 0 && repose < interval)); then
+        sleep $(printf 0.%09d $repose)
+      fi
+    fi
+    # Only print if no frame skips are necessary.
+    [[ $frame -gt $next_frame ]] && echo -e "$p"
+  done < $GONNA_GIVE
 fi
 
 while [[ 1 ]]; do
