@@ -1,12 +1,12 @@
 #!/bin/bash
 # Rick Astley in your Terminal. Prefers 256-color.
-# 2013.03.04 
+# 2013.03.04
 # ~ keroserene <3
 version='1.0'
 my_head=${BASH_SOURCE[0]}
 base_dir=$(dirname $my_head)
-# render='astley80.lulz'
-render='astley80.full'
+render='astley80.lulz'
+# render='astley80.full'
 script='astley.sh'
 
 NEVER="cp -f"
@@ -184,7 +184,7 @@ else
       # slightly if it's *too* fast.
       repose=$((interval - ns_per_frame / 1000000000))
       # echo -e "$frame \t | $next_frame---- $repose"
-      if ((repose > 0 && repose < interval)); then
+      if ((repose > 0 && repose < ns_per_frame)); then
         sleep $(printf 0.%09d $repose)
       fi
     fi
