@@ -161,7 +161,7 @@ trap "clean" EXIT
 echo -e "\e[2J"
 
 if [[ $evil ]]; then
-  $NEVER_GONNA_GIVE $YOU_UP & 
+  $NEVER_GONNA_GIVE $YOU_UP &
   GOTTA_MAKE_YOU_UNDERSTAND=$!
 else
   # $NEVER_GONNA_GIVE $YOU_UP
@@ -175,6 +175,7 @@ else
   next_frame=0
   while read p; do
     ((cnt++))
+    skip=0
     if [[ $cnt == 32 ]]; then
       cnt=0; ((frame++))
       # Calculate skipped frames to attempt constant FPS.
@@ -182,14 +183,17 @@ else
       interval=$((now - begin))
       next_frame=$((interval / ns_per_frame))
       # slightly if it's *too* fast.
-      repose=$((interval - ns_per_frame / 1000000000))
-      # echo -e "$frame \t | $next_frame \t $repose"
-      if ((repose > 0 && repose < ns_per_frame)); then
-        sleep $(printf 0.%09d $repose)
+      [[ $frame -ge $next_frame ]] && skip=0 || skip=1
+      repose=$((ns_per_frame - interval))
+      # echo -e "$frame \t | $next_frame \t $repose \t $skip"
+      if ((repose > 0 && repose < ns_per_frame && skip == "false")); then
+        # sleep $(printf 0.%09d $repose)
+        sleep $(printf 0.%09d $ns_per_frame)
       fi
     fi
     # Only print if no frame skips are necessary.
-    [[ $frame -lt $next_frame ]] || echo -e "$p"
+    [[ $frame -ge $next_frame ]] && echo -e "$p"
+    # [[ $skip -eq 0 ]] && echo -e "$p"
   done < $GONNA_GIVE
   quit
 fi
@@ -197,6 +201,6 @@ fi
 while [[ 1 ]]; do
   echo -en ''
 done
-[[ $evil ]] && trap $NEVER_GONNA_TELL_A_LIE 
+[[ $evil ]] && trap $NEVER_GONNA_TELL_A_LIE
 
 echo -e '\e[u'
