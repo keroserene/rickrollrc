@@ -1,7 +1,6 @@
 #!/bin/bash
-# Rick Astley in your Terminal. Prefers 256-color.
-# 2013.03.04
-# ~ keroserene <3
+# Rick Astley in your Terminal.
+# By Serene Han and Justine Tunney <3
 version='1.0'
 my_head=${BASH_SOURCE[0]}
 base_dir=$(dirname $my_head)
@@ -20,8 +19,6 @@ red='\x1b[38;5;9m'
 purp='\x1b[38;5;171m'
 yell='\x1b[38;5;216m'
 green='\x1b[38;5;10m'
-gr=$(which grep)
-NEVER_GONNA_GIVE="cat"  # Mreow!
 
 echo -e '\x1b[s'  # Save cursor
 
@@ -166,16 +163,17 @@ bean="http://bean.vixentele.com/~keroserene"
 remote="$bean/astley80.full.bz2"
 
 if hash afplay 2>/dev/null; then
-  # With Mac OS we pre-fetch compressed audio and use afplay.
+  # On Mac OS we pre-fetch compressed audio and use afplay.
   #remote="$bean/astley80.mac.bz2"
   echo "downloading audio..."
   obtainium $bean/roll.gsm.wav >/tmp/roll.gsm.wav
   afplay /tmp/roll.gsm.wav &
-else
-  # On Linux we assume the aplay command is available and we stream raw sound.
+  audpid=$!
+elif hash afplay 2>/dev/null; then
+  # On Linux if the aplay command is available, we stream raw sound.
   obtainium $bean/roll.s16 | aplay -q -f S16_LE -r 8000 &
+  audpid=$!
 fi
-audpid=$!
 
 # Print out frames, inserting pauses and skipping frames if necessary to stay
 # as close as possible to real time.
