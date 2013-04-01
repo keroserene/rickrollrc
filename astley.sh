@@ -165,9 +165,9 @@ if [[ $evil ]]; then
   GOTTA_MAKE_YOU_UNDERSTAND=$!
 else
   # $NEVER_GONNA_GIVE $YOU_UP
-  cnt="0"
+  cnt=0
   fps=25
-  ns_per_frame=$((1000000000/fps))
+  ns_per_frame=$((1000000000 / fps))
   skip=0
   begin=$(nanosec)
   prev=$begin
@@ -177,23 +177,16 @@ else
     ((cnt++))
     skip=0
     if [[ $cnt == 32 ]]; then
-      cnt=0; ((frame++))
-      # Calculate skipped frames to attempt constant FPS.
+      cnt=0
+      ((frame++))
       now=$(nanosec)
-      interval=$((now - begin))
-      next_frame=$((interval / ns_per_frame))
-      # slightly if it's *too* fast.
-      [[ $frame -ge $next_frame ]] && skip=0 || skip=1
-      repose=$((ns_per_frame - interval))
-      # echo -e "$frame \t | $next_frame \t $repose \t $skip"
-      if ((repose > 0 && repose < ns_per_frame && skip == "false")); then
-        # sleep $(printf 0.%09d $repose)
-        sleep $(printf 0.%09d $ns_per_frame)
-      fi
+      elapsed=$((now - begin))
+      next_frame=$((elapsed / ns_per_frame))
+      repose=$((frame * ns_per_frame - elapsed))
+      ((repose > 0)) && sleep $(printf 0.%09d $repose)
     fi
     # Only print if no frame skips are necessary.
-    [[ $frame -ge $next_frame ]] && echo -e "$p"
-    # [[ $skip -eq 0 ]] && echo -e "$p"
+    (( frame >= next_frame )) && echo -e "$p"
   done < $GONNA_GIVE
   quit
 fi
