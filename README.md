@@ -25,5 +25,9 @@ Nevertheless, for the enhanced experience, I highly recommend the following:
 
     echo "curl https://raw.github.com/keroserene/rickrollrc/master/roll.sh | bash" >> ~/.bashrc
 
+Which is just
+
+    ./roll.sh inject
+
 Kudos to jart for our hiptext shenanigans ;)
 Please see our sister project: [hiptext](https://github.com/jart/hiptext)

