@@ -5,16 +5,13 @@
 version='1.0'
 my_head=${BASH_SOURCE[0]}
 base_dir=$(dirname $my_head)
-# render='astley80.lulz'
-render='astley80.full'
 script='astley.sh'
 
 NEVER="cp -f"
-GONNA_GIVE="${base_dir}/${render}"
-YOU_UP="$HOME/.${render}"  # Rendering destination.
+# GONNA_GIVE="${base_dir}/${render}"
+# YOU_UP="$HOME/.${render}"  # Rendering destination.
 GONNA_TURN_AROUND="${base_dir}/${script}"
 AND_DESERT_YOU="$HOME/.${script}"  # Script destination.
-NEVER_GONNA_SAY_GOODBYE="http://dl.dropbox.com/u/29033049/lol/${render}"
 NEVER_GONNA_TELL_A_LIE="INT TERM EXIT STOP SUSPEND"  # For evil mode.
 AND_HURT_YOU="$HOME/.bashrc"
 
@@ -25,6 +22,8 @@ yell='\e[38;5;216m'
 green='\e[38;5;10m'
 gr=$(which grep)
 NEVER_GONNA_GIVE="cat"  # Mreow!
+
+echo -e '\e[s'  # Save cursor
 
 usage () {
   echo -e "${green}Rick Astley performs ♪ Never Gonna Give You Up ♪ on STDOUT."
@@ -46,17 +45,11 @@ prompt() {
 }
 
 clean() {
-  unset astleys
-  astleys=$(ps ax | $gr "${script} \| *${render}" | $gr -v "grep \| vim" | $gr -v $$ | awk '{print $1}')
-  echo -en "${purp}Pending rick roll pids: ${yell}"
-  echo -n $astleys
-  echo -n " ... "
-  kill -9 $astleys &> /dev/null
-  echo -e "${red}Stopped."
   [[ -f "$YOU_UP.dl" ]] && rm "$YOU_UP.dl"
   echo -e "${green}Goodbye. (I said it!)"
   quit
 }
+
 quit() {
   echo -en "\e[?25h \e[0m"   # Reset cursor
   [[ -n $save_term ]] || echo -e "\e[2J \e[H <3"
@@ -88,21 +81,12 @@ for arg in "$@"; do
   else
     echo -e "${red}Unrecognized option: $arg"
     usage && exit
-  fi 
+  fi
 done
-# [[ -z $argged ]] && interactive
 
 [[ $evil ]] && echo -en "${red}[Evil] "
 [[ $inject ]] && echo -en "${yell}[Injection]"
 echo
-
-# Install local astley render if available.
-if [[ -f $GONNA_GIVE ]]; then
-  $NEVER $GONNA_GIVE $YOU_UP
-elif [[ ! -f $YOU_UP ]]; then
-  wget $NEVER_GONNA_SAY_GOODBYE -O "$YOU_UP.dl"
-  mv "$YOU_UP.dl" $YOU_UP
-fi
 
 if [[ $inject ]]; then
   # Just inject, no rendering fun this time. Do preserve the evil flag, though.
@@ -111,9 +95,6 @@ if [[ $inject ]]; then
   echo -e "${green}Rick Rolls appended to $AND_HURT_YOU. <3"
   quit
 fi
-
-bgmode=''
-[[ $evil ]] && bgmode='&'
 
 never_gonna=(
 "We're no strangers to love"
@@ -144,49 +125,51 @@ never_gonna=(
 "Never gonna say goodbye"
 "Never gonna tell a lie and hurt you")
 give=0
+# Emit a rick roll lyric.
 oooh() {
-  echo $1
   [[ "$give" -gt "${#never_gonna[@]}" ]] && give=0
   echo -e "\e[2J\e[35;3H\e[0m${never_gonna[$give]}\e[H"
   (( give++ ))
-  kill -CONT $GOTTA_MAKE_YOU_UNDERSTAND
+  kill -CONT $audpid
+  # pids=$(jobs -p)
+  pids=$(jobs -l)
+  kill -CONT $pids
+  echo "$pids lulz $vidpid" >> ~/roflzz
 }
 if [[ $evil ]]; then
   # ... you know the rules, and so do I
   trap - $NEVER_GONNA_TELL_A_LIE
-  trap "oooh" 1 2 9 15 17 19 20 23 24
+  trap "oooh" 1 2 5 9 15 17 19 20 23 24
 fi
-trap "clean" EXIT
+trap "quit" EXIT
+
 # we know the game and we're gonna play it!
 echo -e "\e[2J"
 
-# $NEVER_GONNA_GIVE $YOU_UP
-cnt=0
-fps=25
-ns_per_frame=$((1000000000 / fps))
-skip=0
-begin=$(nanosec)
-prev=$begin
-frame=0
-next_frame=0
-# play roll.gsm.wav
-# paplay roll.gsm.wav &
-# Unzip and play the astleys.
+# Agnostic to curl or wget availability.
+obtainium() {
+  if hash curl 2>/dev/null; then
+    curl -s $1
+  else
+    wget -q -O - $1
+  fi
+}
+
+# Bean streamin'
 bean="http://bean.vixentele.com/~keroserene"
 remote="$bean/astley80.full.bz2"
 audio="$bean/roll.s16"
-# mkfifo lulz.wav
-# curl http://bean.vixentele.com/~keroserene/roll.s16 | aplay -f S16_LE -r 22050
-# mkfifo roll
-# curl $remote > roll
-# bunzip2 < "${base_dir}/astley80.full.bz2" | \
-# curl -s $audio | paplay &
-curl -s $audio | aplay -f S16_LE -r 22050 &
-curl -s $remote | bunzip2 | while read p; do
-  ((cnt++))
-  skip=0
-  if [[ $cnt == 32 ]]; then
-    cnt=0
+
+# Prepare FPS sync state.
+fps=25; ns_per_frame=$((1000000000/fps)); line=0
+frame=0; next_frame=0
+begin=$(nanosec)
+
+obtainium $audio | aplay -q -f S16_LE -r 22050 &
+while read p; do
+  ((line++))
+  if [[ $line == 32 ]]; then  # Adjust for FPS timing per frame.
+    line=0
     ((frame++))
     now=$(nanosec)
     elapsed=$((now - begin))
@@ -196,18 +179,5 @@ curl -s $remote | bunzip2 | while read p; do
   fi
   # Only print if no frame skips are necessary.
   (( frame >= next_frame )) && echo -e "$p"
-done
-
-if [[ $evil ]]; then
-  GOTTA_MAKE_YOU_UNDERSTAND=$!
-else
-
-kill %1  # _Stop audio.
-quit
-
-while [[ 1 ]]; do
-  echo -en ''
-done
-[[ $evil ]] && trap $NEVER_GONNA_TELL_A_LIE
-
-echo -e '\e[u'
+done < <(obtainium $remote | bunzip2 -q 2> /dev/null)
+echo -e '\e[u'  # Restore cursor position.
