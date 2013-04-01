@@ -165,7 +165,8 @@ fps=25; ns_per_frame=$((1000000000/fps)); line=0
 frame=0; next_frame=0
 begin=$(nanosec)
 
-obtainium $audio | aplay -q -f S16_LE -r 22050 &
+# obtainium $audio | aplay -q -f S16_LE -r 22050 &
+obtainium $audio | aplay -q -f S16_LE -r 8000 &
 while read p; do
   ((line++))
   if [[ $line == 32 ]]; then  # Adjust for FPS timing per frame.
