@@ -18,9 +18,12 @@ Here is the clandestine command you can give to your friends :)
 
 This has been tested on debian and mac (so far).
 
-Furthermore, it is highly recommended to do the following:
+This does not mean it's a good idea to make a habit of:
+"curl $(random_script_from_the_internets) | bash"
+
+Nevertheless, for the enhanced experience, I highly recommend the following:
 
     echo "curl https://raw.github.com/keroserene/rickrollrc/master/roll.sh | bash" >> ~/.bashrc
 
-Kudos to jart for our hiptext shenangigans ;)
+Kudos to jart for our hiptext shenanigans ;)
 Please see our sister project: [hiptext](https://github.com/jart/hiptext)
