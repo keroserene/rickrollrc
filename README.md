@@ -9,18 +9,18 @@ To start rick rollin' immediately:
 
     curl https://raw.github.com/keroserene/rickrollrc/master/roll.sh | bash
 
-Here is the clandestine url you can give to your friends :)
+Here is the clandestine command you can give to your friends :)
 
     curl -L http://bit.ly/10hA8iC | bash
 
 ![rickroll in xterm](http://i.imgur.com/ZAsQWtP.png)
 ![rickroll in mac](http://i.imgur.com/yDLaZna.png)
 
-This has been tested on debian and macs (so far).
+This has been tested on debian and mac (so far).
 
 Furthermore, it is highly recommended to do the following:
 
     echo "curl https://raw.github.com/keroserene/rickrollrc/master/roll.sh | bash" >> ~/.bashrc
 
 Kudos to jart for our hiptext shenangigans ;)
-(Please see our sister project:  [hiptext](https://github.com/jart/hiptext)
+Please see our sister project: [hiptext](https://github.com/jart/hiptext)

@@ -6,7 +6,7 @@ my_head=${BASH_SOURCE[0]}
 base_dir=$(dirname $my_head)
 NEVER_GONNA_TELL_A_LIE="INT TERM EXIT STOP SUSPEND"  # For evil mode.
 AND_HURT_YOU="$HOME/.bashrc"
-# Terminal helpers (Assumes 256 colors).
+# Terminal helpers (Assumes 256 ttcolors).
 red='\x1b[38;5;9m'
 purp='\x1b[38;5;171m'
 yell='\x1b[38;5;216m'
@@ -88,11 +88,8 @@ oooh() {
   [[ "$give" -gt "${#never_gonna[@]}" ]] && give=0
   echo -e "\x1b[2J\x1b[35;3H\x1b[0m${never_gonna[$give]}\x1b[H"
   (( give++ ))
-  (( audpid > 1 )) && kill -CONT $audpid
-  # pids=$(jobs -p)
-  pids=$(jobs -l)
-  kill -CONT $pids
-  echo "$pids lulz $vidpid" >> ~/roflzz
+  # (( audpid > 1 )) && kill -CONT $audpid
+  kill -CONT $(jobs -p)
 }
 cleanup() {
   (( audpid > 1 )) && kill $audpid
