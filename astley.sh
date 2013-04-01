@@ -160,25 +160,27 @@ bean="http://bean.vixentele.com/~keroserene"
 remote="$bean/astley80.full.bz2"
 audio="$bean/roll.s16"
 
-# Prepare FPS sync state.
-fps=25; ns_per_frame=$((1000000000/fps)); line=0
-frame=0; next_frame=0
-begin=$(nanosec)
+# Print out frames, inserting pauses and skipping frames if necessary to stay
+# as close as possible to real time.
+python <(cat <<EOF
+import sys
+import time
+fps = 25
+time_per_frame = 1.0 / fps
+begin = time.time()
+frame = 0
+for i, line in enumerate(sys.stdin):
+  if i % 32 == 0:
+    frame += 1
+    now = time.time()
+    elapsed = now - begin
+    next_frame = elapsed / time_per_frame
+    repose = frame * time_per_frame - elapsed
+    if repose > 0.0:
+      time.sleep(repose)
+  if frame >= next_frame:
+    sys.stdout.write(line)
+EOF
+) < <(obtainium $remote | bunzip2 -q 2> /dev/null)
 
-# obtainium $audio | aplay -q -f S16_LE -r 22050 &
-obtainium $audio | aplay -q -f S16_LE -r 8000 &
-while read p; do
-  ((line++))
-  if [[ $line == 32 ]]; then  # Adjust for FPS timing per frame.
-    line=0
-    ((frame++))
-    now=$(nanosec)
-    elapsed=$((now - begin))
-    next_frame=$((elapsed / ns_per_frame))
-    repose=$((frame * ns_per_frame - elapsed))
-    ((repose > 0)) && sleep $(printf 0.%09d $repose)
-  fi
-  # Only print if no frame skips are necessary.
-  (( frame >= next_frame )) && echo -e "$p"
-done < <(obtainium $remote | bunzip2 -q 2> /dev/null)
 echo -e '\e[u'  # Restore cursor position.
