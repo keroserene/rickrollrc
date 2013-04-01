@@ -1,25 +1,26 @@
 # rickrollrc
 
-Bash script which Rick Rolls your terminal, with the option to enable
-indefinite encores for those who desire intense 80's music video
-appreciation sessions.
+Bash script which [Rick Rolls](http://en.wikipedia.org/wiki/Rickrolling) your
+terminal by playing a Rick Astley's Never Gonna Give You Up music video inside
+your 256-color terminal with audio (if available).
 
 ## How to Roll
 To start rick rollin' immediately:
 
     curl https://raw.github.com/keroserene/rickrollrc/master/roll.sh | bash
 
-![Rick Roll in xterms]()
+Here is the clandestine url you can give to your friends :)
 
-For most effectiveness, make sure you're on a 256-color terminal.
-(After all, this is a colorful hobby.)
-For the basic experience:
+    curl -L http://bit.ly/10hA8iC | bash
 
-    ./roll.sh
+![rickroll in xterm](http://i.imgur.com/ZAsQWtP.png)
+![rickroll in mac](http://i.imgur.com/yDLaZna.png)
 
-During Rick's performance, if you wish to prevent rude interruptions and 
-signals from things like Ctrl-C, etc. (and replace them with lyrics).
+This has been tested on debian and macs (so far).
 
-    ./roll.sh evil
+Furthermore, it is highly recommended to do the following:
+
+    echo "curl https://raw.github.com/keroserene/rickrollrc/master/roll.sh | bash" >> ~/.bashrc
 
 Kudos to jart for our hiptext shenangigans ;)
+(Please see our sister project:  [hiptext](https://github.com/jart/hiptext)
