@@ -5,8 +5,8 @@
 version='1.0'
 my_head=${BASH_SOURCE[0]}
 base_dir=$(dirname $my_head)
-render='astley80.lulz'
-# render='astley80.full'
+# render='astley80.lulz'
+render='astley80.full'
 script='astley.sh'
 
 NEVER="cp -f"
@@ -160,36 +160,50 @@ trap "clean" EXIT
 # we know the game and we're gonna play it!
 echo -e "\e[2J"
 
+# $NEVER_GONNA_GIVE $YOU_UP
+cnt=0
+fps=25
+ns_per_frame=$((1000000000 / fps))
+skip=0
+begin=$(nanosec)
+prev=$begin
+frame=0
+next_frame=0
+# play roll.gsm.wav
+# paplay roll.gsm.wav &
+# Unzip and play the astleys.
+bean="http://bean.vixentele.com/~keroserene"
+remote="$bean/astley80.full.bz2"
+audio="$bean/roll.s16"
+# mkfifo lulz.wav
+# curl http://bean.vixentele.com/~keroserene/roll.s16 | aplay -f S16_LE -r 22050
+# mkfifo roll
+# curl $remote > roll
+# bunzip2 < "${base_dir}/astley80.full.bz2" | \
+# curl -s $audio | paplay &
+curl -s $audio | aplay -f S16_LE -r 22050 &
+curl -s $remote | bunzip2 | while read p; do
+  ((cnt++))
+  skip=0
+  if [[ $cnt == 32 ]]; then
+    cnt=0
+    ((frame++))
+    now=$(nanosec)
+    elapsed=$((now - begin))
+    next_frame=$((elapsed / ns_per_frame))
+    repose=$((frame * ns_per_frame - elapsed))
+    ((repose > 0)) && sleep $(printf 0.%09d $repose)
+  fi
+  # Only print if no frame skips are necessary.
+  (( frame >= next_frame )) && echo -e "$p"
+done
+
 if [[ $evil ]]; then
-  $NEVER_GONNA_GIVE $YOU_UP &
   GOTTA_MAKE_YOU_UNDERSTAND=$!
 else
-  # $NEVER_GONNA_GIVE $YOU_UP
-  cnt=0
-  fps=25
-  ns_per_frame=$((1000000000 / fps))
-  skip=0
-  begin=$(nanosec)
-  prev=$begin
-  frame=0
-  next_frame=0
-  while read p; do
-    ((cnt++))
-    skip=0
-    if [[ $cnt == 32 ]]; then
-      cnt=0
-      ((frame++))
-      now=$(nanosec)
-      elapsed=$((now - begin))
-      next_frame=$((elapsed / ns_per_frame))
-      repose=$((frame * ns_per_frame - elapsed))
-      ((repose > 0)) && sleep $(printf 0.%09d $repose)
-    fi
-    # Only print if no frame skips are necessary.
-    (( frame >= next_frame )) && echo -e "$p"
-  done < $GONNA_GIVE
-  quit
-fi
+
+kill %1  # _Stop audio.
+quit
 
 while [[ 1 ]]; do
   echo -en ''
