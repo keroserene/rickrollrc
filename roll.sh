@@ -127,6 +127,10 @@ elif hash aplay 2>/dev/null; then
   # On Linux if the aplay command is available, stream raw sound.
   obtainium $bean/roll.s16 | aplay -q -f S16_LE -r 8000 &
   audpid=$!
+elif hash play 2>/dev/null; then
+  # On cygwin if the play command is available (via "sox" package), stream raw sound.
+  obtainium $bean/roll.s16 | play -q --endian little -r 8000 -c 1 roll.s16 &
+  audpid=$!
 fi
 
 # Sync FPS to reality as best as possible. Mac's freebsd version of date cannot
