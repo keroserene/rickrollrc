@@ -16,8 +16,8 @@ Here is the clandestine command you can give to your friends :)
 ![rickroll in xterm](http://i.imgur.com/ZAsQWtP.png)
 ![rickroll in mac](http://i.imgur.com/yDLaZna.png)
 
-This has been tested on arch, debian and mac (so far).
-There is currently no sound in cygwin, but that is to be fixed.
+This has been tested on arch, debian, mac and cygwin (so far).
+To enable sound in cygwin, install the **sox** package.
 
 For the record: It is not actually a good idea to make a habit of:
 "curl $(random_script_from_the_internets) | bash"
