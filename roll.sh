@@ -128,8 +128,11 @@ elif hash aplay 2>/dev/null; then
   obtainium $bean/roll.s16 | aplay -q -f S16_LE -r 8000 &
   audpid=$!
 elif hash play 2>/dev/null; then
-  # On cygwin if the play command is available (via "sox" package), stream raw sound.
-  obtainium $bean/roll.s16 | play -q --endian little -r 8000 -c 1 roll.s16 &
+  # On Cygwin, if the play command is available (via the sox package), pre-fetch
+  # compressed audio.
+  echo "downloading audio..."
+  obtainium $bean/roll.gsm.wav >/tmp/roll.gsm.wav
+  play -q /tmp/roll.gsm.wav &
   audpid=$!
 fi
 
