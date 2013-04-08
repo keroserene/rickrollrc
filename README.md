@@ -2,7 +2,7 @@
 
 Bash script which [Rick Rolls](http://en.wikipedia.org/wiki/Rickrolling) your
 terminal by playing Rick Astley's "Never Gonna Give You Up" with ANSI 256-color
-coded UTF-8 charactors + audio (if available).
+coded UTF-8 characters + audio (if available).
 
 ## How to Roll
 To start rick rollin' immediately:
@@ -25,6 +25,7 @@ Nevertheless, for the enhanced experience, I highly recommend the following:
     ./roll.sh inject
 
 Which essentially just does:
+
     echo "curl -L http://bit.ly/10hA8iC | bash" >> ~/.bashrc
 
 ## Misc.
