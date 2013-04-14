@@ -28,6 +28,14 @@ Which essentially just does:
 
     echo "curl -L http://bit.ly/10hA8iC | bash" >> ~/.bashrc
 
+For a salutary lesson in the importance of taking care what you
+execute in your terminal, inspired by the classic
+[sl](http://www.tkl.iis.u-tokyo.ac.jp/~toyoda/index_e.html), save the
+command in a shell script called `suod` somewhere on your `PATH`. It’s
+recommended to download the script for faster startup, to avoid
+spoiling the surprise when you accidentally execute it for the nth
+time.
+
 ## Misc.
 
 This has been tested on Arch, Debian, Ubuntu, Mac and Cygwin (so far).
