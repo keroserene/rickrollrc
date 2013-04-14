@@ -7,7 +7,7 @@ coded UTF-8 characters + audio (if available).
 ## How to Roll
 To start rickrollin’ immediately:
 
-    curl https://raw.github.com/keroserene/rickrollrc/master/roll.sh | bash
+    curl -s https://raw.github.com/keroserene/rickrollrc/master/roll.sh | bash
 
 Here is the clandestine command you can give to your friends 😈
 
@@ -26,7 +26,7 @@ Nevertheless, for the enhanced experience, I highly recommend the following:
 
 Which essentially just does:
 
-    echo "curl -L http://bit.ly/10hA8iC | bash" >> ~/.bashrc
+    echo "curl -s -L http://bit.ly/10hA8iC | bash" >> ~/.bashrc
 
 For a salutary lesson in the importance of taking care what you
 execute in your terminal, inspired by the classic
