@@ -16,11 +16,11 @@ Here is the clandestine command you can give to your friends 😈
 ![rickroll in xterm](http://i.imgur.com/ZAsQWtP.png)
 ![rickroll in mac](http://i.imgur.com/yDLaZna.png)
 
-(For the record: It is not actually a good idea to make a habit of
+For the record: It is not actually a good idea to make a habit of
 
     curl $(random_script_from_the_internets) | bash"
 
-) Nevertheless, for the enhanced experience, I highly recommend the following:
+Nevertheless, for the enhanced experience, I highly recommend the following:
 
     ./roll.sh inject
 
