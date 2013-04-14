@@ -7,7 +7,7 @@ video="$bean/astley80.full.bz2"
 audio_gsm="$bean/roll.gsm.wav"
 audio_raw="$bean/roll.s16"
 audpid=0
-NEVER_GONNA='curl -L http://bit.ly/10hA8iC | bash'
+NEVER_GONNA='curl -s -L http://bit.ly/10hA8iC | bash'
 MAKE_YOU_CRY="$HOME/.bashrc"
 red='\x1b[38;5;9m'
 yell='\x1b[38;5;216m'
@@ -54,7 +54,7 @@ obtainium() {
 }
 echo -en "\x1b[?25l \x1b[2J \x1b[H"  # Hide cursor, clear screen.
 
-echo -e "${yell}Fetching audio..."
+#echo -e "${yell}Fetching audio..."
 if has? afplay; then
   # On Mac OS, if |afplay| available, pre-fetch compressed audio.
   obtainium $audio_gsm >/tmp/roll.gsm.wav
@@ -69,7 +69,7 @@ elif has? play; then
 fi
 audpid=$!
 
-echo -e "${yell}Fetching video..."
+#echo -e "${yell}Fetching video..."
 # Sync FPS to reality as best as possible. Mac's freebsd version of date cannot
 # has nanoseconds so inject python. :/
 python <(cat <<EOF
