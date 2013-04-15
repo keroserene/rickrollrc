@@ -34,7 +34,9 @@ execute in your terminal, inspired by the classic
 command in a shell script called `suod` somewhere on your `PATH`. It’s
 recommended to download the script for faster startup, to avoid
 spoiling the surprise when you accidentally execute it for the nth
-time.
+time (and also, unless you really like living dangerously, for
+security, in case we are demonically possessed to replace `roll.sh`
+with something evil).
 
 ## Misc.
 
