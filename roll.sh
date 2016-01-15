@@ -2,10 +2,12 @@
 # Rick Astley in your Terminal.
 # By Serene Han and Justine Tunney <3
 version='1.1'
-bean='http://bean.vixentele.com/~keroserene'
-video="$bean/astley80.full.bz2"
-audio_gsm="$bean/roll.gsm.wav"
-audio_raw="$bean/roll.s16"
+rick='http://keroserene.net/lol'
+video="$rick/astley80.full.bz2"
+# TODO: I'll let someone with mac or windows machine send a pull request
+# to get gsm going again :)
+audio_gsm="$rick/roll.gsm"
+audio_raw="$rick/roll.s16"
 audpid=0
 NEVER_GONNA='curl -s -L http://bit.ly/10hA8iC | bash'
 MAKE_YOU_CRY="$HOME/.bashrc"
@@ -61,7 +63,7 @@ if has? afplay; then
   afplay /tmp/roll.gsm.wav &
 elif has? aplay; then
   # On Linux, if |aplay| available, stream raw sound.
-  obtainium $audio_raw | aplay -q -f S16_LE -r 8000 &
+  obtainium $audio_raw | aplay -Dplug:default -q -f S16_LE -r 8000 &
 elif has? play; then
   # On Cygwin, if |play| is available (via sox), pre-fetch compressed audio.
   obtainium $audio_gsm >/tmp/roll.gsm.wav
