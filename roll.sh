@@ -2,7 +2,7 @@
 # Rick Astley in your Terminal.
 # By Serene Han and Justine Tunney <3
 version='1.1'
-rick='http://keroserene.net/lol'
+rick='http://bootyhouse.org/lol'
 video="$rick/astley80.full.bz2"
 # TODO: I'll let someone with mac or windows machine send a pull request
 # to get gsm going again :)
@@ -59,8 +59,9 @@ echo -en "\x1b[?25l \x1b[2J \x1b[H"  # Hide cursor, clear screen.
 #echo -e "${yell}Fetching audio..."
 if has? afplay; then
   # On Mac OS, if |afplay| available, pre-fetch compressed audio.
-  obtainium $audio_gsm >/tmp/roll.gsm.wav
-  afplay /tmp/roll.gsm.wav &
+  obtainium $audio_gsm >/tmp/roll.gsm
+  sox /tmp/roll.gsm /tmp/roll.wav
+  afplay /tmp/roll.wav &
 elif has? aplay; then
   # On Linux, if |aplay| available, stream raw sound.
   obtainium $audio_raw | aplay -Dplug:default -q -f S16_LE -r 8000 &
