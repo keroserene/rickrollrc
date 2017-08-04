@@ -13,6 +13,10 @@ Here is the clandestine command you can give to your friends 😈
 
     curl -s -L http://bit.ly/10hA8iC | bash
 
+And here a slightly obfuscated version, for people who don't trust shortened links:
+
+    curl -s -L $(echo 6269742e6c792f31306841386943 | xxd -r -p) | bash
+
 ![rickroll in xterm](http://i.imgur.com/ZAsQWtP.png)
 ![rickroll in mac](http://i.imgur.com/yDLaZna.png)
 
