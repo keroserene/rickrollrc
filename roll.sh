@@ -63,7 +63,7 @@ if has? afplay; then
   afplay /tmp/roll.s16 &
 elif has? aplay; then
   # On Linux, if |aplay| available, stream raw sound.
-  obtainium $audio_raw | aplay -Dplug:default -q -f S16_LE -r 8000 &
+  obtainium $audio_raw | aplay -q &
 elif has? play; then
   # On Cygwin, if |play| is available (via sox), pre-fetch compressed audio.
   obtainium $audio_gsm >/tmp/roll.gsm.wav
