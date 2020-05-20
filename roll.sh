@@ -15,6 +15,7 @@ red='\x1b[38;5;9m'
 yell='\x1b[38;5;216m'
 green='\x1b[38;5;10m'
 purp='\x1b[38;5;171m'
+printf '\033[8;31;80t'
 echo -en '\x1b[s'  # Save cursor.
 
 has?() { hash $1 2>/dev/null; }
@@ -77,7 +78,7 @@ audpid=$!
 python <(cat <<EOF
 import sys
 import time
-fps = 25; time_per_frame = 1.0 / fps
+fps = 28.5; time_per_frame = 1.0 / fps
 buf = ''; frame = 0; next_frame = 0
 begin = time.time()
 try:
