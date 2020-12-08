@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Rick Astley in your Terminal.
 # By Serene Han and Justine Tunney <3
 version='1.1'
