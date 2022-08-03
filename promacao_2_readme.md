@@ -1,6 +1,6 @@
-#Titulo
+<h1>Titulo</h1>
 
-##Subtitulo
+<h2>Subitulo</h2>
 
 Texto de 10 linhas Texto de 10 linhas Texto de 10 linhas Texto de 10 linhas Texto de 10 linhas Texto de 10 linhas 
 Texto de 10 linhas Texto de 10 linhas Texto de 10 linhas Texto de 10 linhas Texto de 10 linhas Texto de 10 linhas Texto de 10 linhas Texto de 10 linhas 
