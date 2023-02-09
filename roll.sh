@@ -78,9 +78,11 @@ audpid=$!
 # If `python` does not exist, use `python3` instead
 # needed for Debian 11 and Ubuntu 22.04
 if ! which python > /dev/null ; then
-  python=python3
+  python_binary=python3
+else
+  python_binary=python
 fi
-$python <(cat <<EOF
+$python_binary <(cat <<EOF
 import sys
 import time
 fps = 25; time_per_frame = 1.0 / fps
