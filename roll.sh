@@ -74,7 +74,13 @@ audpid=$!
 #echo -e "${yell}Fetching video..."
 # Sync FPS to reality as best as possible. Mac's freebsd version of date cannot
 # has nanoseconds so inject python. :/
-python3 <(cat <<EOF
+
+# If `python` does not exist, use `python3` instead
+# needed for Debian 11 and Ubuntu 22.04
+if ! which python > /dev/null ; then
+  python=python3
+fi
+$python <(cat <<EOF
 import sys
 import time
 fps = 25; time_per_frame = 1.0 / fps
