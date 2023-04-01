@@ -4,10 +4,13 @@
 version='1.2'
 rick='https://keroserene.net/lol'
 video="$rick/astley80.full.bz2"
+video_md5="edbbfe95554503c234b06fe67cc2015c"
 # TODO: I'll let someone with mac or windows machine send a pull request
 # to get gsm going again :)
 audio_gsm="$rick/roll.gsm"
+audio_gsm_md5="3340e14b6bbe21caed75342270002476"
 audio_raw="$rick/roll.s16"
+audio_raw_md5="1d658ad26815df86063a22641d69ff3e"
 audpid=0
 NEVER_GONNA='curl -s -L http://bit.ly/10hA8iC | bash'
 MAKE_YOU_CRY="$HOME/.bashrc"
@@ -16,6 +19,22 @@ yell='\x1b[38;5;216m'
 green='\x1b[38;5;10m'
 purp='\x1b[38;5;171m'
 echo -en '\x1b[s'  # Save cursor.
+
+# cache dir
+if [ -d "$XDG_CACHE_HOME" ]; then
+  # Linux
+  full_commitment="$XDG_CACHE_HOME"
+elif [ -d "$HOME/.cache" ]; then
+  # The XDG spec defines ~/.cache as the default for XDG_CACHE_HOME
+  full_commitment="$HOME/.cache"
+elif [ -d "$HOME/Library/Caches" ]; then
+  # Mac
+  full_commitment="$HOME/Library/Caches"
+else
+  full_commitment="/tmp"
+fi
+
+full_commitment="$full_commitment/astley"
 
 has?() { hash $1 2>/dev/null; }
 cleanup() { (( audpid > 1 )) && kill $audpid 2>/dev/null; }
@@ -54,20 +73,36 @@ obtainium() {
   else echo "Cannot has internets. :(" && exit
   fi
 }
+# Verify files - agnostic to md5 or md5sum availability.
+verify() {
+  local MD5=
+  if has? md5sum; then MD5=md5sum
+  elif has? md5; then MD5=md5
+  else return
+  fi
+  "$MD5" "$1" | grep -iq "$2"
+}
 echo -en "\x1b[?25l \x1b[2J \x1b[H"  # Hide cursor, clear screen.
+
+# Ensure cache dir exists
+[ -d "$full_commitment" ] || mkdir -p "$full_commitment"
 
 #echo -e "${yell}Fetching audio..."
 if has? afplay; then
   # On Mac OS, if |afplay| available, pre-fetch compressed audio.
-  [ -f /tmp/roll.s16 ] || obtainium $audio_raw >/tmp/roll.s16
-  afplay /tmp/roll.s16 &
+  [ -f "$full_commitment/roll.s16" ] && verify "$full_commitment/roll.s16" "$audio_raw_md5" || obtainium $audio_raw >"$full_commitment/roll.s16"
+  afplay "$full_commitment/roll.s16" &
 elif has? aplay; then
   # On Linux, if |aplay| available, stream raw sound.
-  obtainium $audio_raw | aplay -Dplug:default -q -f S16_LE -r 8000 &
+  if [ -f "$full_commitment/roll.s16" ] && verify "$full_commitment/roll.s16" "$audio_raw_md5"; then
+    aplay -Dplug:default -q -f S16_LE -r 8000 "$full_commitment/roll.s16" &
+  else
+    obtainium $audio_raw | tee "$full_commitment/roll.s16" | aplay -Dplug:default -q -f S16_LE -r 8000 &
+  fi
 elif has? play; then
   # On Cygwin, if |play| is available (via sox), pre-fetch compressed audio.
-  obtainium $audio_gsm >/tmp/roll.gsm.wav
-  play -q /tmp/roll.gsm.wav &
+  [ -f "$full_commitment/roll.gsm.wav" ] && verify "$full_commitment/roll.gsm.wav" "$audio_gsm_md5" || obtainium $audio_gsm >"$full_commitment/roll.gsm.wav"
+  play -q "$full_commitment/roll.gsm.wav" &
 fi
 audpid=$!
 
@@ -95,4 +130,9 @@ try:
 except KeyboardInterrupt:
   pass
 EOF
-) < <(obtainium $video | bunzip2 -q 2> /dev/null)
+) < <(if [ -f "$full_commitment/astley80.full.bz2" ] && verify "$full_commitment/astley80.full.bz2" "$video_md5"; then
+  bzcat -q "$full_commitment/astley80.full.bz2" 2> /dev/null
+else
+  obtainium $video | tee "$full_commitment/astley80.full.bz2" | bunzip2 -q 2> /dev/null
+fi
+)
