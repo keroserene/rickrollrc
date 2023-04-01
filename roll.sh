@@ -24,7 +24,7 @@ quit() { echo -e "\x1b[2J \x1b[0H ${purp}<3 \x1b[?25h \x1b[u \x1b[m"; }
 usage () {
   echo -en "${green}Rick Astley performs ♪ Never Gonna Give You Up ♪ on STDOUT."
   echo -e "  ${purp}[v$version]"
-  echo -e "${yell}Usage: ./astley.sh [OPTIONS...]"
+  echo -e "${yell}Usage: ./roll.sh [OPTIONS...]"
   echo -e "${purp}OPTIONS : ${yell}"
   echo -e " help   - Show this message."
   echo -e " inject - Append to ${purp}${USER}${yell}'s bashrc. (Recommended :D)"
