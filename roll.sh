@@ -71,10 +71,18 @@ elif has? play; then
 fi
 audpid=$!
 
+# python is missing on ubuntus
+snek(){
+  if has? python; then python $1
+  elif has? python3; then python3 $1
+  else echo "There are no moves :("
+  fi
+}
+
 #echo -e "${yell}Fetching video..."
 # Sync FPS to reality as best as possible. Mac's freebsd version of date cannot
 # has nanoseconds so inject python. :/
-python <(cat <<EOF
+snek <(cat <<EOF
 import sys
 import time
 fps = 25; time_per_frame = 1.0 / fps
