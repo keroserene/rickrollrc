@@ -11,7 +11,7 @@ To start rickrollin’ immediately:
 
 Here is the clandestine command you can give to your friends 😈
 
-    curl -s -L http://bit.ly/10hA8iC | bash
+    curl -s -L https://bit.ly/3zvELNz | bash
 
 ![rickroll in xterm](http://i.imgur.com/ZAsQWtP.png)
 ![rickroll in mac](http://i.imgur.com/yDLaZna.png)
