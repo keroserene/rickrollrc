@@ -38,6 +38,14 @@ time (and also, unless you really like living dangerously, for
 security, in case we are demonically possessed to replace `roll.sh`
 with something evil).
 
+How do you stop it? On a Mac, you can type in
+
+```
+pgrep "afplay" | xargs kill
+```
+
+To kill the audio.
+
 ## Misc.
 
 This has been tested on Arch, Debian, Ubuntu, Mac and Cygwin (so far).
