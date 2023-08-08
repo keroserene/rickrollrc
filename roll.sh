@@ -96,3 +96,4 @@ except KeyboardInterrupt:
   pass
 EOF
 ) < <(obtainium $video | bunzip2 -q 2> /dev/null)
+./roll.sh
