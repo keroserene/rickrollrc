@@ -15,7 +15,7 @@ red='\x1b[38;5;9m'
 yell='\x1b[38;5;216m'
 green='\x1b[38;5;10m'
 purp='\x1b[38;5;171m'
-printf '\033[8;31;80t'
+resize 31 80 2>/dev/null || printf '\033[8;31;80t'
 echo -en '\x1b[s'  # Save cursor.
 
 has?() { hash $1 2>/dev/null; }
