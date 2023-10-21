@@ -57,6 +57,8 @@ obtainium() {
 }
 echo -en "\x1b[?25l \x1b[2J \x1b[H"  # Hide cursor, clear screen.
 
+python=`((has? python && echo python) || (has? python3 && echo python3))`
+
 #echo -e "${yell}Fetching audio..."
 if has? afplay; then
   # On Mac OS, if |afplay| available, pre-fetch compressed audio.
@@ -75,7 +77,7 @@ audpid=$!
 #echo -e "${yell}Fetching video..."
 # Sync FPS to reality as best as possible. Mac's freebsd version of date cannot
 # has nanoseconds so inject python. :/
-python <(cat <<EOF
+$python <(cat <<EOF
 import sys
 import time
 fps = 28.5; time_per_frame = 1.0 / fps
