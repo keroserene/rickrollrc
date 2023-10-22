@@ -15,6 +15,7 @@ red='\x1b[38;5;9m'
 yell='\x1b[38;5;216m'
 green='\x1b[38;5;10m'
 purp='\x1b[38;5;171m'
+resize 31 80 2>/dev/null || printf '\033[8;31;80t'
 echo -en '\x1b[s'  # Save cursor.
 
 has?() { hash $1 2>/dev/null; }
@@ -56,6 +57,8 @@ obtainium() {
 }
 echo -en "\x1b[?25l \x1b[2J \x1b[H"  # Hide cursor, clear screen.
 
+python=`((has? python && echo python) || (has? python3 && echo python3))`
+
 #echo -e "${yell}Fetching audio..."
 if has? afplay; then
   # On Mac OS, if |afplay| available, pre-fetch compressed audio.
@@ -74,10 +77,10 @@ audpid=$!
 #echo -e "${yell}Fetching video..."
 # Sync FPS to reality as best as possible. Mac's freebsd version of date cannot
 # has nanoseconds so inject python. :/
-python <(cat <<EOF
+$python <(cat <<EOF
 import sys
 import time
-fps = 25; time_per_frame = 1.0 / fps
+fps = 28.5; time_per_frame = 1.0 / fps
 buf = ''; frame = 0; next_frame = 0
 begin = time.time()
 try:
